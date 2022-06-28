@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ApiModule } from './api/api.module';
+import { getTypeORMConfig } from './config/typeorm.config';
 
 @Module({
-  imports: [ApiModule],
+  imports: [
+    TypeOrmModule.forRootAsync({ useFactory: getTypeORMConfig }),
+    ApiModule,
+  ],
   controllers: [],
   providers: [],
 })

@@ -44,7 +44,7 @@ export class CSVService {
             break;
 
           case 'date':
-            value = new Date(dto[key]);
+            value = new Date(dto[key]) || undefined;
             break;
 
           case 'boolean':

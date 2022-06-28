@@ -4,10 +4,14 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  ValidationPipe,
+  UsePipes,
+  Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ICompanyDraft } from '../../models/interfaces';
+import { AuthCompanyDto } from '../dto/company.dto';
 import { CompaniesService, CSVService } from '../services';
 
 // -----------------------------------------------------------------
@@ -61,7 +65,19 @@ export class CompaniesController {
       },
     });
 
-    return dtoCompaniesList;
+    await this.companiesService.updateCompanies(dtoCompaniesList);
+
+    return { success: true };
+  }
+
+  @Post('auth')
+  @UsePipes(new ValidationPipe())
+  async loginCompany(@Body() dto: AuthCompanyDto) {
+    const { email, password } = dto;
+
+    const company = await this.companiesService.loginCompany(email, password);
+
+    return company.dtoLogin();
   }
 }
 

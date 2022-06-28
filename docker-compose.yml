@@ -1,0 +1,14 @@
+version: "3.4"
+  
+services:
+  db:
+    container_name: triada_db
+    image: postgres:11-alpine
+    ports:
+      - "5442:5432"
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=triada_db
+    tmpfs:
+      - /var/lib/postgresql/data
