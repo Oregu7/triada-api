@@ -12,10 +12,10 @@ export class CompanyEntity extends ModelEntity {
   @Column('varchar', { length: 50 })
   type: string;
 
-  @Column('datetime')
+  @Column('timestamp')
   createDT: Date = new Date();
 
-  @Column('datetime')
+  @Column('timestamp')
   updateDT: Date = new Date();
 
   @Column('varchar', { length: 150 })

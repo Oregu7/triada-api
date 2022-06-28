@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as csv from 'csvtojson';
+import * as moment from 'moment';
 
 import { FileMimeType } from '../../models/types';
 
@@ -36,23 +37,20 @@ export class CSVService {
       const mappedDto: Record<string, any> = {};
 
       for (const key of Object.keys(schema)) {
-        let value: string | number | boolean | Date;
+        let value: string | number | boolean | Date = String(dto[key]).trim();
 
         switch (schema[key].type) {
           case 'number':
-            value = Number(dto[key]);
+            value = Number(value);
             break;
 
           case 'date':
-            value = new Date(dto[key]) || undefined;
+            value = moment(value, 'DD.MM.YYYY h:mm:ss').toDate();
             break;
 
           case 'boolean':
-            value = Boolean(dto[key]);
+            value = Boolean(value);
             break;
-
-          default:
-            value = String(dto[key]).trim();
         }
 
         mappedDto[schema[key].field] = value;

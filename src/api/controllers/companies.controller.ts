@@ -26,7 +26,7 @@ export class CompaniesController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    if (this.csvService.checkIsCSV(file.mimetype) === false) {
+    if (this.csvService.checkIsCSV(file?.mimetype) === false) {
       throw new BadRequestException('Only csv files are supported');
     }
 

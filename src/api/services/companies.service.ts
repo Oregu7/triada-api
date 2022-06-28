@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { isDate } from 'class-validator';
 
 import { md5 } from '../../utils/helpers';
 import { CompanyEntity } from '../../models/entities';
@@ -13,17 +14,25 @@ export class CompaniesService {
   ) {}
 
   createCompany(dto: Record<string, any>) {
-    const company = this.companyRepository.create(dto);
+    const company = CompanyEntity.createFrom(dto);
 
     if (company.password) {
       company.password = md5(company.password);
+    }
+
+    if (isDate(company.createDT) === false) {
+      company.createDT = new Date();
+    }
+
+    if (isDate(company.updateDT) === false) {
+      company.updateDT = new Date();
     }
 
     return company;
   }
 
   async updateCompanies(dtoList: Record<string, any>[]) {
-    const companies = dtoList.map(this.createCompany);
+    const companies = dtoList.map(this.createCompany.bind(this));
 
     await this.companyRepository.upsert(companies, {
       conflictPaths: ['id'],
