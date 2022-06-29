@@ -5,10 +5,21 @@ services:
     container_name: triada_db
     image: postgres:11-alpine
     ports:
-      - "5442:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_USER=admin
       - POSTGRES_DB=triada_db
-    tmpfs:
+    volumes:
       - /var/lib/postgresql/data
+
+  triada-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/triada-api
+    depends_on: 
+      - db
