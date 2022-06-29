@@ -7,6 +7,8 @@ import {
   ValidationPipe,
   UsePipes,
   Body,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -71,6 +73,7 @@ export class CompaniesController {
   }
 
   @Post('auth')
+  @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
   async loginCompany(@Body() dto: AuthCompanyDto) {
     const { email, password } = dto;
